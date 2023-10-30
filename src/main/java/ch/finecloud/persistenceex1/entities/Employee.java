@@ -16,7 +16,7 @@ public class Employee {
     @Id
     private Integer id;
     private String name;
-    private long salary;
+    private Long salary;
 
     @Override
     public boolean equals(Object o) {

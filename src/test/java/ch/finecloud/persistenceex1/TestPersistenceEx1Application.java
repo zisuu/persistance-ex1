@@ -8,7 +8,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
 @TestConfiguration(proxyBeanMethods = false)
-public class TestHrApplication {
+public class TestPersistenceEx1Application {
 
     @Bean
     @ServiceConnection
@@ -17,7 +17,7 @@ public class TestHrApplication {
     }
 
     public static void main(String[] args) {
-        SpringApplication.from(PersistenceEx1Application::main).with(TestHrApplication.class).run(args);
+        SpringApplication.from(PersistenceEx1Application::main).with(TestPersistenceEx1Application.class).run(args);
     }
 
 }

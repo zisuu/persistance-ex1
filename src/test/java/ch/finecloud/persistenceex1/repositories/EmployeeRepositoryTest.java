@@ -1,6 +1,6 @@
 package ch.finecloud.persistenceex1.repositories;
 
-import ch.finecloud.persistenceex1.TestHrApplication;
+import ch.finecloud.persistenceex1.TestPersistenceEx1Application;
 import ch.finecloud.persistenceex1.entities.Employee;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Import;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Import(TestHrApplication.class)
+@Import(TestPersistenceEx1Application.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class EmployeeRepositoryTest {

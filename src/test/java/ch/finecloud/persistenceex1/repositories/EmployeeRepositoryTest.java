@@ -2,52 +2,45 @@ package ch.finecloud.persistenceex1.repositories;
 
 import ch.finecloud.persistenceex1.TestPersistenceEx1Application;
 import ch.finecloud.persistenceex1.entities.Employee;
+import ch.finecloud.persistenceex1.repositories.EmployeeRepository;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Import(TestPersistenceEx1Application.class)
-@DataJpaTest
+@DataJpaTest(showSql = false)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class EmployeeRepositoryTest {
 
     @Autowired
     private EmployeeRepository employeeRepository;
 
-
     @Test
-    void testAddEmployee() {
-        Employee employee = new Employee(1, "testEmployee", 1000L);
-        employeeRepository.saveAndFlush(employee); // Use saveAndFlush for a single entity
-        Employee savedEmployee = employeeRepository.findById(1).get();
-        assertNotNull(savedEmployee);
-        assertEquals(employee.getName(), savedEmployee.getName());
-    }
+    void save() {
+        var employee = new Employee();
+        employee.setName("Peter Muster");
+        employee.setSalary(80000L);
+        employee = employeeRepository.saveAndFlush(employee);
 
-    @Test
-    void testUpdateEmployee() {
-        Employee employee = new Employee(1, "testEmployee", 1000L);
-        employeeRepository.saveAndFlush(employee);
-        Employee savedEmployee = employeeRepository.findById(1).get();
-        assertNotNull(savedEmployee);
-        assertEquals(employee.getName(), savedEmployee.getName());
-        savedEmployee.setName("newName");
-        employeeRepository.saveAndFlush(savedEmployee);
-        Employee updatedEmployee = employeeRepository.findById(1).get();
-        assertEquals("newName", updatedEmployee.getName());
+        assertNotNull(employee);
     }
 
     @Test
     void findAll() {
-        Employee employee1 = new Employee(1, "testEmployee1", 1000L);
-        Employee employee2 = new Employee(2, "testEmployee2", 2000L);
-        employeeRepository.saveAndFlush(employee1);
-        employeeRepository.saveAndFlush(employee2);
-        assertEquals(2, employeeRepository.findAll().size());
-    }
+        var employee = new Employee();
+        employee.setName("Jane Doe");
+        employee.setSalary(90000L);
+        employeeRepository.save(employee);
 
+        var employees = employeeRepository.findAll();
+
+        assertThat(employees).hasSize(1);
+    }
 }

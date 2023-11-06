@@ -1,11 +1,15 @@
 package ch.finecloud.persistenceex1.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,9 +18,44 @@ import lombok.Setter;
 @Entity
 public class Employee {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="employee_seq")
+    @SequenceGenerator(name = "employee_seq", sequenceName = "employee_seq", initialValue = 1000)
     private Integer id;
     private String name;
-    private Long salary;
+    private long salary;
+    @ManyToOne
+    private Employee boss;
+    @OneToMany(mappedBy = "boss")
+    private Set<Employee> directs = new HashSet<>();
+    @OneToMany(mappedBy = "employee")
+    @OrderBy("type")
+    private List<Phone> phones = new ArrayList<>();
+    @ManyToOne
+    private Department department;
+    @OneToOne
+    private Address address;
+    @ManyToMany(mappedBy = "employees")
+    private Set<Project> projects = new HashSet<>();
+
+    public void addDirect(Employee employee) {
+        employee.setBoss(this);
+        directs.add(employee);
+    }
+
+    public void removeDirect(Employee employee) {
+        employee.setBoss(null);
+        directs.remove(employee);
+    }
+
+    public void addPhone(Phone phone) {
+        phone.setEmployee(this);
+        phones.add(phone);
+    }
+
+    public void removePhone(Phone phone) {
+        phone.setEmployee(null);
+        phones.remove(phone);
+    }
 
     @Override
     public boolean equals(Object o) {

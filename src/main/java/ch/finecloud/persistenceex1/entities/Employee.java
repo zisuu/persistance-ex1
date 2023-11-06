@@ -23,18 +23,18 @@ public class Employee {
     private Integer id;
     private String name;
     private long salary;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Employee boss;
-    @OneToMany(mappedBy = "boss")
+    @OneToMany(mappedBy = "boss", cascade = CascadeType.REFRESH)
     private Set<Employee> directs = new HashSet<>();
-    @OneToMany(mappedBy = "employee")
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("type")
     private List<Phone> phones = new ArrayList<>();
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     private Department department;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Address address;
-    @ManyToMany(mappedBy = "employees")
+    @ManyToMany(mappedBy = "employees", cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     private Set<Project> projects = new HashSet<>();
 
     public void addDirect(Employee employee) {
